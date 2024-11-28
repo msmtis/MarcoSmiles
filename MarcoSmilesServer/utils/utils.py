@@ -2,13 +2,24 @@ import json
 import numpy as np
 
 def read_request(request_as_json):
-    hand_data = request_as_json.get('HandWrappers')
+    left_hand_data = request_as_json.get('LeftHandWrappers')
+    right_hand_data = request_as_json.get('RightHandWrappers')
     note = request_as_json.get('Note', None)
     # All poses
     all_poses = []
 
-    # Read the json data
-    for pose in hand_data:
+    # Read the json data from left hand
+    for pose in left_hand_data:
+        numerical_values = []
+        for joint in pose:
+            # Position
+            positions = pose[joint]
+            for coordinate in positions:
+                numerical_values.append(positions[coordinate])
+        all_poses.append(numerical_values)
+        
+    # Read the json data from right hand
+    for pose in right_hand_data:
         numerical_values = []
         for joint in pose:
             # Position

@@ -95,9 +95,11 @@ public class TrainingScript : MonoBehaviour
             for (int i = 0; i < 128; i++)
             {
                 HandWrapper leftHandWrapper = _handReader.ReadHand(HandSide.Left);
-                requestWrapper.HandWrappers.Add(leftHandWrapper);
+                HandWrapper rightHandWrapper = _handReader.ReadHand(HandSide.Right);
+                requestWrapper.LeftHandWrappers.Add(leftHandWrapper);
+                requestWrapper.RightHandWrappers.Add(rightHandWrapper);
             }
-            Debug.LogError("HandWrapper: " + JsonConvert.SerializeObject(requestWrapper.HandWrappers[0]));
+            Debug.LogError("HandWrapper: " + JsonConvert.SerializeObject(requestWrapper.LeftHandWrappers[0]));
 
             SendToServer(requestWrapper);
         }

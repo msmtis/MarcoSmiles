@@ -42,20 +42,23 @@ class DQN(nn.Module):
 class DQNAgent:
 
     def __init__(self, env, learning_rate=3e-4, gamma=0.99, buffer_size=10000, tau=0.005):
+        # Environment
         self.env = env
+        
         # Learning rate
         self.learning_rate = learning_rate
-        # discount factor
+        
+        # Discount factor, used in the compute_loss method
         self.gamma = gamma
-        # that is ht edimension of the expreience replay
+        
+        # Dimension of the expreience replay
         self.replay_buffer = BasicBuffer(max_size=buffer_size)
-        # Updating factor, is a wey to weight the target net update
-        # in this script the periodical update of the net is applyed for every 1000 interval
-        # if u want to use the same chose as van Hasselt, that use the periodic UPDATE u can set the tau to 1, so u will obtain a perfect copy of the online network
-        # u can always try to do a mix of them using the tau and the periodic UPDATE
-        self.tau = tau
+        
+        # Updating factor, is a way to weight the target net update
+        # If you set tau to 1, you will obtain a perfect copy of the online network
         self.tau = 1
-
+        
+        # Should be 128 * 5 (128 is 1 played note on the client, we want to update the target net every 5 played notes)
         self.target_update_interval = 1
 
         self.update_counter = 0
@@ -64,15 +67,16 @@ class DQNAgent:
         self.device = torch.device(
             "cuda" if torch.cuda.is_available() else "cpu")
 
-        # creating 2 model
-        # Model that chose the actions
+        # Creating 2 models..
+        # Online network
         self.model = DQN(env.observation_space_shape,
                          env.action_space.n).to(self.device)
-        # Target that evaluate the actions
+        
+        # Target network
         self.target_model = DQN(
             env.observation_space_shape, env.action_space.n).to(self.device)
 
-        # hard copy model parameters to target model parameters
+        # Hard copy model parameters to target model parameters
         for target_param, param in zip(self.model.parameters(), self.target_model.parameters()):
             target_param.data.copy_(param)
 
@@ -148,7 +152,7 @@ class Network:
     action_space_shape: int - the number of possible outputs (#notes to be predicted)
     """
 
-    def __init__(self, observation_space_shape=45, action_space_shape=12, batch_size=128, max_steps=10, max_episodes=100, predicted_counter=0, guessed_counter=0):
+    def __init__(self, observation_space_shape=90, action_space_shape=12, batch_size=128, max_steps=10, max_episodes=100, predicted_counter=0, guessed_counter=0):
         self.batch_size = batch_size
         self.max_steps = max_steps
         self.max_episodes = max_episodes

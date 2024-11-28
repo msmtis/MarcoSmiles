@@ -91,7 +91,9 @@ public class PlayScript : MonoBehaviour
             for (int i = 0; i < 16; i++)
             {
                 HandWrapper leftHandWrapper = _handReader.ReadHand(HandSide.Left);
-                requestWrapper.HandWrappers.Add(leftHandWrapper);
+                HandWrapper rightHandWrapper = _handReader.ReadHand(HandSide.Right);
+                requestWrapper.LeftHandWrappers.Add(leftHandWrapper);
+                requestWrapper.RightHandWrappers.Add(rightHandWrapper);
             }
 
             SendToServer(requestWrapper);

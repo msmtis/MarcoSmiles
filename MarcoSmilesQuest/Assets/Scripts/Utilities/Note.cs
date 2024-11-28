@@ -5,7 +5,6 @@ using UnityEngine;
 [Serializable]
 public class Note
 {
-
     [Serializable]
     public enum PitchEnum
     {
@@ -20,7 +19,8 @@ public class Note
         SOL_SHARP,
         LA,
         LA_SHARP,
-        SI
+        SI,
+        PAUSE
     }
 
     [Serializable]
@@ -67,6 +67,11 @@ public class Note
         GuessedCounter = 0;
     }
 
+    public static Note GetPause()
+    {
+        return new Note(PitchEnum.PAUSE, OctaveEnum.ZERO);
+    }
+
     private static PitchEnum GetRandomPitch()
     {
         Array values = Enum.GetValues(typeof(PitchEnum));
@@ -109,6 +114,8 @@ public class Note
                 return "LA#";
             case PitchEnum.SI:
                 return "SI";
+            case PitchEnum.PAUSE:
+                return "PAUSE";
             default:
                 return "Error somewhere :( Check the logs!";
         }
@@ -142,6 +149,8 @@ public class Note
                 return "A#";
             case "SI":
                 return "B";
+            case "PAUSE":
+                return "PAUSE";
             default:
                 return "Error somewhere :( Check the logs!";
         }
@@ -175,6 +184,8 @@ public class Note
                 return PitchEnum.LA_SHARP;
             case "SI":
                 return PitchEnum.SI;
+            case "PAUSE":
+                return PitchEnum.PAUSE;
             default:
                 throw new Exception("Invalid pitch!");
         }
@@ -184,6 +195,10 @@ public class Note
     {
         switch (octave)
         {
+            case "0":
+                return OctaveEnum.ZERO;
+            case "PAUSE":
+                return OctaveEnum.ZERO;
             case "1":
                 return OctaveEnum.ONE;
             case "2":
@@ -232,11 +247,19 @@ public class Note
 
     public override string ToString()
     {
+        if (Pitch == PitchEnum.PAUSE && Octave == OctaveEnum.ZERO)
+        {
+            return "PAUSE";
+        }
         return PitchToString(Pitch) + OctaveToString(Octave);
     }
 
     public string ToStringInternational()
     {
+        if (Pitch == PitchEnum.PAUSE && Octave == OctaveEnum.ZERO)
+        {
+            return "PAUSE";
+        }
         return PitchEuropeanToInternational(PitchToString(Pitch)) + OctaveToString(Octave);
     }
 

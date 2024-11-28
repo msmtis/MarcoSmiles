@@ -4,18 +4,21 @@ using System.Collections.Generic;
 [Serializable]
 public class RequestWrapper
 {
-    public List<HandWrapper> HandWrappers;
+    public List<HandWrapper> LeftHandWrappers;
+    public List<HandWrapper> RightHandWrappers;
     public int Note;
 
 
     public RequestWrapper()
     {
-        HandWrappers = new List<HandWrapper>();
+        LeftHandWrappers = new List<HandWrapper>();
+        RightHandWrappers = new List<HandWrapper>();
     }
 
     public RequestWrapper(int note)
     {
-        HandWrappers = new List<HandWrapper>();
+        LeftHandWrappers = new List<HandWrapper>();
+        RightHandWrappers = new List<HandWrapper>();
         Note = note;
     }
 }

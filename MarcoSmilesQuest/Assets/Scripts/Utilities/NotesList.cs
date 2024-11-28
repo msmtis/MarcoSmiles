@@ -9,17 +9,19 @@ public class NotesList
 
     public static void CreateEmptyNotesList(int length)
     {
-        Notes = new Note[length];
+        Notes = new Note[length + 1];
+        Notes[length] = Note.GetPause();
     }
 
     public static void CreateNotesList(Note startNote, int length)
     {
-        Notes = new Note[length];
+        Notes = new Note[length + 1];
         Notes[0] = startNote;
         for (int i = 1; i < length; i++)
         {
             Notes[i] = Notes[i - 1].ComputeNextNote();
         }
+        Notes[length] = Note.GetPause();
     }
 
     public static Note GetFirstNote()

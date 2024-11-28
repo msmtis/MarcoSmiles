@@ -25,10 +25,8 @@ class MS_env(gym.Env):
     def step(self, action):
         done = False
         if (action == self.actual_label):
-            print("note reached "+str(self.actual_label))
             reward = 100
             done = True
-
         else:
             reward = 0
             done = True

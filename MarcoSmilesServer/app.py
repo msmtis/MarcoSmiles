@@ -1,10 +1,8 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
 from utils.utils import load_action_space, read_request, toint
 from DQN.Double_DQN import Network
-import numpy as np
 
 app = Flask(__name__)
-
 
 @app.route('/hello-world', methods=['GET'])
 def hello_world():
