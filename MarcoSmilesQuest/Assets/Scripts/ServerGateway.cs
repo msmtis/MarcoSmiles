@@ -30,7 +30,7 @@ public class ServerGateway : MonoBehaviour
 
     public void CreateNewModel(int outputDimension, System.Action<string> callback)
     {
-        StartCoroutine(ExecRequest(_serverUrl + ServerEndpointsEnum.NEW_MODEL, "POST", "{\"output_dimension\": " + outputDimension + "}", callback));
+        StartCoroutine(ExecRequest(_serverUrl + ServerEndpointsEnum.NEW_MODEL, "POST", "{\"output_dimension\": " + (outputDimension + 1) + "}", callback));
     }
 
     public void SendHandData(RequestWrapper requestWrapper, System.Action<string> callback)

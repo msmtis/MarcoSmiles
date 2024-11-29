@@ -99,7 +99,7 @@ public class TrainingScript : MonoBehaviour
                 requestWrapper.LeftHandWrappers.Add(leftHandWrapper);
                 requestWrapper.RightHandWrappers.Add(rightHandWrapper);
             }
-            Debug.LogError("HandWrapper: " + JsonConvert.SerializeObject(requestWrapper.LeftHandWrappers[0]));
+            Debug.LogError("Note sent: " + JsonConvert.SerializeObject(_noteToPlay.ToString() + " - " + _noteToPlay.ComputeDistance()));
 
             SendToServer(requestWrapper);
         }

@@ -8,25 +8,26 @@ def read_request(request_as_json):
     # All poses
     all_poses = []
 
-    # Read the json data from left hand
-    for pose in left_hand_data:
+    # Read the json data from left and right hands
+    for left_pose, right_pose in zip(left_hand_data, right_hand_data):
         numerical_values = []
-        for joint in pose:
-            # Position
-            positions = pose[joint]
-            for coordinate in positions:
-                numerical_values.append(positions[coordinate])
+        for pose in [left_pose, right_pose]:
+            for joint in pose:
+                # Position
+                positions = pose[joint]
+                for coordinate in positions:
+                    numerical_values.append(positions[coordinate])
         all_poses.append(numerical_values)
         
-    # Read the json data from right hand
-    for pose in right_hand_data:
-        numerical_values = []
-        for joint in pose:
-            # Position
-            positions = pose[joint]
-            for coordinate in positions:
-                numerical_values.append(positions[coordinate])
-        all_poses.append(numerical_values)
+    # # Read the json data from right hand
+    # for pose in right_hand_data:
+    #     numerical_values = []
+    #     for joint in pose:
+    #         # Position
+    #         positions = pose[joint]
+    #         for coordinate in positions:
+    #             numerical_values.append(positions[coordinate])
+    #     all_poses.append(numerical_values)
 
     # print(f"Received data: {numerical_values}")
     return all_poses, note
