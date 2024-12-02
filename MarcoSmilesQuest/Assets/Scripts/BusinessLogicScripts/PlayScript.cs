@@ -128,9 +128,9 @@ public class PlayScript : MonoBehaviour
 
     private void UpdatePoseTime()
     {
-        if (_poseTime >= 1.5f && _cycles % 5 == 0)
+        if (_poseTime > 1.0f && _cycles % 5 == 0)
         {
-            _poseTime = _poseTime - 0.5f;
+            _poseTime = _poseTime - 0.25f;
         }
         _cycles++;
     }

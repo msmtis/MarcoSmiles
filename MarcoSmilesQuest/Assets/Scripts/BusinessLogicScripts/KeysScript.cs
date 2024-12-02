@@ -63,6 +63,7 @@ public class KeysScript : MonoBehaviour
 
     void OnEnable()
     {
+        // This sucks, I'm really sorry :(
         if (NotesList.Notes != null && NotesList.Notes.Length > 0)
         {
             foreach (Note note in NotesList.Notes)
@@ -73,6 +74,16 @@ public class KeysScript : MonoBehaviour
                     {
                         key.GetComponent<Image>().color = GetSelectedColor(key.name);
                         SelectedKeys.Add(key);
+                        // Se è il primo elemento di NotesList.Notes, lo seleziono come primo tasto
+                        if (note == NotesList.Notes[0])
+                        {
+                            FirstSelectedKey = key;
+                        }
+                        // Se è l'ultimo elemento di NotesList.Notes, lo seleziono come ultimo tasto
+                        if (note == NotesList.Notes[NotesList.Notes.Length - 1])
+                        {
+                            LastSelectedKey = key;
+                        }
                     }
                 }
             }
