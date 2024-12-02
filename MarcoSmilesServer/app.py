@@ -24,6 +24,7 @@ def hand_data():
 
         # Get the most common prediction
         prediction = max(set(predictions), key=predictions.count)
+        print("Predicted: " + str(prediction))
 
         # Live accuracy logic
         network.predicted_counter += 1
