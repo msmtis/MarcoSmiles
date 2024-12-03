@@ -23,11 +23,16 @@ public class SynthScript : MonoBehaviour
 
     public void PlayNote(Note toPlay)
     {
-        if (!toPlay.Equals(Note.GetPause()))
+        if(toPlay.Equals(Note.GetPause()))
         {
+            _synth.TriggerReleaseAll(immediate: true);
+        }
+        if (!toPlay.Equals(Note.GetPause()))
+        {   
+            // _synth.TriggerReleaseAll(immediate: false);
             _synth.TriggerAttackAndRelease(ToneNote.Parse(
                 toPlay.ToStringInternational()
-            ), duration: 1.5f);
+            ), duration: 2.0f);
         }
     }
 

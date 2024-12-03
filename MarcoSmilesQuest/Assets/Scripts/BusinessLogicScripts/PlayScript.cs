@@ -8,11 +8,12 @@ public class PlayScript : MonoBehaviour
     public static event Action<Note> PlayNote;
     public static event Action<float> StartProgressBar;
 
+    private Note _notePlaying;
     private Note _noteToPlay;
     private int _cycles = 0;
     private int _countdown = 3;
-    private float _poseTime = 2f;
-    private const float _feedbackTime = 1.5f;
+    // private float _poseTime = 2f;
+    // private const float _feedbackTime = 1.5f;
 
     [SerializeField]
     private HandReader _handReader;
@@ -62,12 +63,12 @@ public class PlayScript : MonoBehaviour
     public void Play()
     {
         // Tell him what to do
-        _playCanvasUIManager.SetModelGuess("..");
-        _playCanvasUIManager.SetStatus("Keep steady pose..");
-        StartProgressBar?.Invoke(_poseTime);
+        // _playCanvasUIManager.SetModelGuess("..");
+        // _playCanvasUIManager.SetStatus("Keep steady pose..");
+        // StartProgressBar?.Invoke(_poseTime);
 
         // Collect data and send it to the server
-        Invoke("CollectDataAndSendToServer", _poseTime);
+        Invoke("CollectDataAndSendToServer", 0f);
     }
 
     private void CollectDataAndSendToServer()
@@ -77,18 +78,18 @@ public class PlayScript : MonoBehaviour
         {
             Debug.LogError("Hand tracking lost!");
             _playCanvasUIManager.SetModelGuess("No hand data, retrying..");
-            Invoke("Play", _feedbackTime);
+            Invoke("Play", 1.5f);
         }
         else
         {
             // Tell the user we're collecting data
-            _playCanvasUIManager.SetStatus("Acquiring pose..");
+            // _playCanvasUIManager.SetStatus("Acquiring pose..");
 
             // Init RequestWrapper
             RequestWrapper requestWrapper = new RequestWrapper();
 
             // Get the hand data
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 32; i++)
             {
                 HandWrapper leftHandWrapper = _handReader.ReadHand(HandSide.Left);
                 HandWrapper rightHandWrapper = _handReader.ReadHand(HandSide.Right);
@@ -96,11 +97,11 @@ public class PlayScript : MonoBehaviour
                 requestWrapper.RightHandWrappers.Add(rightHandWrapper);
             }
 
-            SendToServer(requestWrapper);
+            SendToServerAndHandle(requestWrapper);
         }
     }
 
-    private void SendToServer(RequestWrapper requestWrapper)
+    private void SendToServerAndHandle(RequestWrapper requestWrapper)
     {
         // Send the hand data to the server
         _serverGateway.SendHandDataPlayMode(requestWrapper, (response) =>
@@ -108,32 +109,46 @@ public class PlayScript : MonoBehaviour
             // Parse the response
             Note notePredicted = ParseResponse(response);
 
-            // Do the business logic
-            _playCanvasUIManager.SetModelGuess(notePredicted.ToString());
-            _playCanvasUIManager.SetStatus("Playing..");
-            PlayNote?.Invoke(notePredicted);
-            // UpdatePoseTime();
+            // If the note is not the same as the previous one, play it
+            if (notePredicted != null && _notePlaying != notePredicted)
+            {
+                // Update the playing note
+                _notePlaying = notePredicted;
 
+                // Do the business logic
+                _playCanvasUIManager.SetModelGuess(notePredicted.ToString());
+                _playCanvasUIManager.SetStatus("Playing..");
+                PlayNote?.Invoke(notePredicted);
+                // UpdatePoseTime();
+            }
             // Repeat!
-            Invoke("Play", _feedbackTime);
+            Invoke("Play", 0.1f);
         });
     }
 
     private static Note ParseResponse(string response)
     {
-        int messageAsInt = int.Parse(JSON.Parse(response)["message"]);
-        Note notePredicted = NotesList.Notes[messageAsInt];
-        return notePredicted;
+        try
+        {
+            int messageAsInt = int.Parse(JSON.Parse(response)["message"]);
+            Note notePredicted = NotesList.Notes[messageAsInt];
+            return notePredicted;
+        }
+        catch (FormatException e)
+        {
+            Debug.Log("Error parsing response: " + e.Message);
+            return null;
+        }
     }
 
-    private void UpdatePoseTime()
-    {
-        if (_poseTime > 1.0f && _cycles % 5 == 0)
-        {
-            _poseTime = _poseTime - 0.25f;
-        }
-        _cycles++;
-    }
+    // private void UpdatePoseTime()
+    // {
+    //     if (_poseTime > 1.0f && _cycles % 5 == 0)
+    //     {
+    //         _poseTime = _poseTime - 0.25f;
+    //     }
+    //     _cycles++;
+    // }
 
     public void StopPlaying()
     {

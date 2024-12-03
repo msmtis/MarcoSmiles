@@ -68,6 +68,9 @@ public class KeysScript : MonoBehaviour
         {
             foreach (Note note in NotesList.Notes)
             {
+                if (note == Note.GetPause()){
+                    continue;
+                }
                 foreach (GameObject key in _keys)
                 {
                     if (key.name == note.ToString())
@@ -79,8 +82,8 @@ public class KeysScript : MonoBehaviour
                         {
                             FirstSelectedKey = key;
                         }
-                        // Se è l'ultimo elemento di NotesList.Notes, lo seleziono come ultimo tasto
-                        if (note == NotesList.Notes[NotesList.Notes.Length - 1])
+                        // Se è il penultimo (l'ultimo è la pausa) elemento di NotesList.Notes, lo seleziono come ultimo tasto
+                        if (note == NotesList.Notes[NotesList.Notes.Length - 1 - 1])
                         {
                             LastSelectedKey = key;
                         }

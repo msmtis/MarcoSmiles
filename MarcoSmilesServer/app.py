@@ -52,11 +52,17 @@ def hand_data_play_mode():
 
         # Predict whole batch
         for pose in hand_data:
-            prediction = network.agent.get_action(pose)
+            prediction = network.agent.get_action(pose, training_mode=False)
             predictions.append(toint(prediction))
 
         # Get the most common prediction
         prediction = max(set(predictions), key=predictions.count)
+        print("Predicted: " + str(prediction) + " with confidence: " + str(predictions.count(prediction) / len(predictions)))
+        
+        # Check if prediction has at least 55% confidence
+        if predictions.count(prediction) / len(predictions) < 0.50:
+            prediction = "_"
+            
 
         # Bye bye
         return jsonify({

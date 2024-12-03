@@ -229,7 +229,7 @@ public class Note
         {
             throw new Exception("No more notes available!");
         }
-        PitchEnum nextPitch = (PitchEnum)((int)(Pitch + 1) % Enum.GetValues(typeof(PitchEnum)).Length);
+        PitchEnum nextPitch = (PitchEnum)((int)(Pitch + 1) % (Enum.GetValues(typeof(PitchEnum)).Length - 1));
         OctaveEnum nextOctave = Pitch == PitchEnum.SI ? Octave + 1 : Octave;
         return new Note(nextPitch, nextOctave);
     }

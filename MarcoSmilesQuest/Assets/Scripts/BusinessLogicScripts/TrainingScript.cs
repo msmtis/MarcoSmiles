@@ -118,7 +118,7 @@ public class TrainingScript : MonoBehaviour
             UpdateStatus(notePredicted);
             PlayNote?.Invoke(notePredicted);
             UpdateAccuracy?.Invoke(accuracy);
-            // UpdatePoseTime();
+            UpdatePoseTime();
 
             // Repeat!
             Invoke("Train", _fedbackTime);
@@ -148,7 +148,7 @@ public class TrainingScript : MonoBehaviour
 
     private void UpdatePoseTime()
     {
-        if (_poseTime >= 1.0f && _cycles % 5 == 0)
+        if (_poseTime >= 2f && _cycles % 5 == 0)
         {
             _poseTime = _poseTime - 0.25f;
         }

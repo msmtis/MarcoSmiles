@@ -59,7 +59,7 @@ class DQNAgent:
         self.tau = 1
         
         # Should be 128 * 5 (128 is 1 played note on the client, we want to update the target net every 5 played notes)
-        self.target_update_interval = 1
+        self.target_update_interval = 640
 
         self.update_counter = 0
 
@@ -82,12 +82,12 @@ class DQNAgent:
 
         self.optimizer = torch.optim.Adam(self.model.parameters())
 
-    def get_action(self, state, eps=0.20):
+    def get_action(self, state, eps=0.35, training_mode=True):
         state = torch.FloatTensor(state).float().unsqueeze(0).to(self.device)
         qvals = self.model.forward(state)
         action = np.argmax(qvals.cpu().detach().numpy())
 
-        if (np.random.randn() < eps):
+        if (training_mode==True and np.random.randn() < eps):
             return self.env.action_space.sample()
 
         return action
