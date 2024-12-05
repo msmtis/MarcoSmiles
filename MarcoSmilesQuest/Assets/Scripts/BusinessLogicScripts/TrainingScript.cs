@@ -18,7 +18,7 @@ public class TrainingScript : MonoBehaviour
 
     private Note _noteToPlay;
     private int _cycles = 0;
-    private float _poseTime = 4f;
+    private float _poseTime = 5f;
     private const float _fedbackTime = 1.5f;
 
     // Start is called before the first frame update
@@ -118,7 +118,7 @@ public class TrainingScript : MonoBehaviour
             UpdateStatus(notePredicted);
             PlayNote?.Invoke(notePredicted);
             UpdateAccuracy?.Invoke(accuracy);
-            // UpdatePoseTime();
+            UpdatePoseTime();
 
             // Repeat!
             Invoke("Train", _fedbackTime);
@@ -148,9 +148,9 @@ public class TrainingScript : MonoBehaviour
 
     private void UpdatePoseTime()
     {
-        if (_poseTime >= 1.5f && _cycles % 5 == 0)
+        if (_poseTime >= 2f && _cycles % 10 == 0)
         {
-            _poseTime = _poseTime - 0.5f;
+            _poseTime = _poseTime - 0.25f;
         }
         _cycles++;
     }

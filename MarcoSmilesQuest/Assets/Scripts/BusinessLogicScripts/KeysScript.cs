@@ -8,8 +8,21 @@ using UnityEngine.UI;
 public class KeysScript : MonoBehaviour
 {
 
+    // All keys
     private List<GameObject> _keys;
-    public static List<GameObject> SelectedKeys = new List<GameObject>();
+
+    // Only the selected keys
+
+    private static List<GameObject> _selectedKeys = new List<GameObject>();
+    public static List<GameObject> SelectedKeys
+    {
+        get { 
+            // Sort the list of selected keys by Pitch and Octave
+            _selectedKeys = _selectedKeys.OrderBy(k => new Note(k.name).Octave).ThenBy(k => new Note(k.name).Pitch).ToList();
+            return _selectedKeys;
+        }
+        private set { _selectedKeys = value; }
+    }
 
     private GameObject _firstSelectedKey;
     public GameObject FirstSelectedKey
@@ -63,16 +76,32 @@ public class KeysScript : MonoBehaviour
 
     void OnEnable()
     {
+        ResetKeys();
+        // This sucks, I'm really sorry :(
         if (NotesList.Notes != null && NotesList.Notes.Length > 0)
         {
             foreach (Note note in NotesList.Notes)
             {
+                if (note.Equals(Note.GetPause()))
+                {
+                    continue;
+                }
                 foreach (GameObject key in _keys)
                 {
                     if (key.name == note.ToString())
                     {
                         key.GetComponent<Image>().color = GetSelectedColor(key.name);
                         SelectedKeys.Add(key);
+                        // Se è il primo elemento di NotesList.Notes, lo seleziono come primo tasto
+                        if (note == NotesList.Notes[0])
+                        {
+                            FirstSelectedKey = key;
+                        }
+                        // Se è il penultimo (l'ultimo è la pausa) elemento di NotesList.Notes, lo seleziono come ultimo tasto
+                        if (note == NotesList.Notes[NotesList.Notes.Length - 1 - 1])
+                        {
+                            LastSelectedKey = key;
+                        }
                     }
                 }
             }

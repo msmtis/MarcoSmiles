@@ -229,14 +229,14 @@ public class Note
         {
             throw new Exception("No more notes available!");
         }
-        PitchEnum nextPitch = (PitchEnum)((int)(Pitch + 1) % Enum.GetValues(typeof(PitchEnum)).Length);
+        PitchEnum nextPitch = (PitchEnum)((int)(Pitch + 1) % (Enum.GetValues(typeof(PitchEnum)).Length - 1));
         OctaveEnum nextOctave = Pitch == PitchEnum.SI ? Octave + 1 : Octave;
         return new Note(nextPitch, nextOctave);
     }
 
     private static int ComputeDistance(Note startNote, Note endNote)
     {
-        return ((int)(endNote.Pitch - startNote.Pitch)) + ((int)(endNote.Octave - startNote.Octave) * Enum.GetValues(typeof(PitchEnum)).Length);
+        return ((int)(endNote.Pitch - startNote.Pitch)) + ((int)(endNote.Octave - startNote.Octave) * (Enum.GetValues(typeof(PitchEnum)).Length - 1));
     }
 
     public int ComputeDistance()
