@@ -16,6 +16,7 @@ def hand_data():
         predictions = []
 
         hand_data, note = read_request(request.json)
+        print("Note received: " + str(note))
 
         # Predict whole batch
         for pose in hand_data:
@@ -60,7 +61,7 @@ def hand_data_play_mode():
         print("Predicted: " + str(prediction) + " with confidence: " + str(predictions.count(prediction) / len(predictions)))
         
         # Check if prediction has at least 55% confidence
-        if predictions.count(prediction) / len(predictions) < 0.50:
+        if predictions.count(prediction) / len(predictions) < 0.65:
             prediction = "_"
             
 

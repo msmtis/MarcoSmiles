@@ -236,7 +236,7 @@ public class Note
 
     private static int ComputeDistance(Note startNote, Note endNote)
     {
-        return ((int)(endNote.Pitch - startNote.Pitch)) + ((int)(endNote.Octave - startNote.Octave) * Enum.GetValues(typeof(PitchEnum)).Length);
+        return ((int)(endNote.Pitch - startNote.Pitch)) + ((int)(endNote.Octave - startNote.Octave) * (Enum.GetValues(typeof(PitchEnum)).Length - 1));
     }
 
     public int ComputeDistance()
